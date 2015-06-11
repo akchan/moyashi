@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  white_list: MyText
+  order: 1
+  uniqueness: false
+  project_id: 
+  column_id: 1
+
+two:
+  name: MyString
+  white_list: MyText
+  order: 1
+  uniqueness: false
+  project_id: 
+  column_id: 1

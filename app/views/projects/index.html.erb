@@ -1,0 +1,27 @@
+<h1>Projects</h1>
+
+<%= render partial: 'shared/flash', locals: {flash: flash} %>
+
+<table id="sortable_table" class="tablesorter uk-table uk-table-hover uk-table-striped">
+  <thead>
+    <tr>
+      <th class="uk-text-center">No.</th>
+      <th class="uk-text-center">Name</th>
+      <th class="uk-text-center">Samples</th>
+      <th class="uk-text-center">Last update</th>
+      <th class="uk-text-center">Created at</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each_with_index do |project, i| %>
+      <tr>
+        <td class="uk-text-right"><%= i + 1 %></td>
+        <td><%= link_to project.name, project %></td>
+        <td class="uk-text-right"><%= project.records.count %></td>
+        <td class="uk-text-center"><%= project.updated_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+        <td class="uk-text-center"><%= project.created_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

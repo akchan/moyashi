@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moyashi</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<nav class="uk-navbar uk-navbar-attached navbar-fixed">
+  <%= link_to "Moyashi", root_path, class: 'uk-navbar-brand' %>
+
+  <ul class="uk-navbar-nav">
+    <% if @project.try(:id) %>
+      <li class="uk-parent" data-uk-dropdown>
+        <%= link_to project_path(@project) do %>
+          Project: <%= @project.name.truncate(18) %>&nbsp;<i class="uk-icon-caret-down"></i>
+        <% end %>
+
+        <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-2">
+          <div class="uk-grid uk-dropdown-grid">
+            <div class="uk-width-1-2">
+              <ul class="uk-nav uk-nav-dropdown uk-panel">
+                <li>
+                  <%= link_to project_path(@project) do %>
+                    <i class="uk-icon-home"></i> Project home
+                  <% end %>
+                </li>
+
+                <li class="uk-nav-divider"></li>
+
+                <li class="uk-nav-header">I/O</li>
+
+                <li>
+                  <%= link_to nil do %>
+                    <i class="uk-icon-plus-circle"></i> Add a sample
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to nil do %>
+                    <i class="uk-icon-file"></i> Import samples
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to nil do %>
+                    <i class="uk-icon-floppy-o"></i> Export samples
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+
+            <div class="uk-width-1-2">
+              <ul class="uk-nav uk-nav-dropdown uk-panel">
+                <li class="uk-nav-header">FOR ADMIN</li>
+
+                <li>
+                  <%= link_to edit_project_path(@project) do %>
+                    <i class="uk-icon-cog"></i> Project settings
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to project_labels_path(@project) do %>
+                    <i class="uk-icon-cog"></i> Label management
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to project_confirm_deleting_path(@project) do %>
+                    <i class="uk-icon-exclamation-triangle"></i> Delete project
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+
+          <ul class="uk-nav uk-nav-navbar">
+          </ul>
+        </div>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to new_project_path do %>
+          <i class="uk-icon-plus-circle"></i> New project
+        <% end %>
+      </li>
+    <% end %>
+
+    <li>
+      <%= link_to root_path do %>
+        <i class="uk-icon-bar-chart"></i> Analysis
+      <% end %>
+    </li>
+  </ul>
+</nav>
+
+<div class="content-body">
+  <%= yield %>
+</div>
+
+<footer>
+  Powered by Moyashi (c) 2015 Satoshi Funayama
+</footer>
+
+</body>
+</html>

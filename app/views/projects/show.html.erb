@@ -1,0 +1,40 @@
+<%= render partial: 'shared/flash', locals: {flash: flash} %>
+
+<h1><%= @project.name %></h1>
+
+<div class="uk-grid">
+  <div class="uk-width-large-3-4">
+  <p class=""><%= simple_format h(@project.information) %></p>
+  </div>
+</div>
+
+
+<table id="sortable_table" class="tablesorter uk-table uk-table-hover uk-table-striped">
+  <thead>
+    <tr>
+      <th class="uk-text-center">No.</th>
+      <th class="uk-text-center">Detail</th>
+      <% @labels.each do |label| %>
+        <th class="uk-text-center"><%= label %></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @records.each.with_index do |record, i| %>
+      <tr>
+        <td class="uk-text-right"><%= i + 1 %></td>
+        <td class="uk-text-center">
+          <%= link_to nil, class: 'uk-button uk-button-default' do %>
+            <i class="uk-icon-area-chart uk-icon-medium"></i>
+          <% end %>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<%= link_to 'Back', projects_path, class: 'uk-button uk-button-default' %>

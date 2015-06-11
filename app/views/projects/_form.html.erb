@@ -1,0 +1,42 @@
+<%= form_for(@project, html: {class: 'uk-form uk-form-horizontal'}) do |f| %>
+  <% if @project.errors.any? %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+      <% @project.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <div class="uk-form-row">
+      <%= f.label :name, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.text_field :name, class: 'uk-form-width-large' %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <%= f.label :information, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.text_area :information, class: 'uk-form-width-large', rows: 10 %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <%= f.label :default_spectrum_parser, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.select :default_spectrum_parser, Moyashi::SpectrumParser::Base.parsers.keys, {include_blank: false}, class: 'uk-form-width-large' %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <div class="uk-form-controls">
+        <%= f.submit nil, class: 'uk-button uk-button-primary' %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,13 @@
+<% if flash[:notice] %>
+  <div class="uk-alert uk-alert-success" data-uk-alert>
+    <a href="#" class="uk-alert-close uk-close"></a>
+    <p><%= notice %></p>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="uk-alert uk-alert-success" data-uk-alert>
+    <a href="#" class="uk-alert-close uk-close"></a>
+    <p><%= alert %></p>
+  </div>
+<% end %>

@@ -1,0 +1,56 @@
+<h1>Labels</h1>
+
+<%= render partial: 'shared/flash', locals: {flash: flash} %>
+
+<%= form_for(@project, url: project_labels_order_path(@project), method: :patch) do |project| %>
+  <table class="uk-table uk-table-hover uk-table-striped label_sort">
+    <thead>
+      <tr>
+        <th class="uk-text-center">Sort</th>
+        <th class="uk-text-center">Name</th>
+        <th class="uk-text-center">White list</th>
+        <th class="uk-text-center">Free text</th>
+        <th class="uk-text-center">Uniqueness</th>
+        <th colspan="1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @project.labels.order(:order).each do |label| %>
+        <tr>
+          <%= project.fields_for :labels, label do |l| %>
+            <%= l.hidden_field :order %>
+          <% end %>
+          <td class="uk-text-center label_sort_handle"><i class="uk-icon-reorder"></i></td>
+          <td><%= label.name %></td>
+          <td class="uk-text-center">
+            <% unless label.white_list.empty? %>
+              <i class="uk-icon-check"></i>
+            <% end %>
+          </td>
+          <td class="uk-text-center">
+            <% if label.white_list.empty? %>
+              <i class="uk-icon-check"></i>
+            <% end %>
+          </td>
+          <td class="uk-text-center">
+            <% if label.uniqueness %>
+              <i class="uk-icon-check"></i>
+            <% end %></td>
+          <td class="uk-text-center">
+            <%= link_to 'Edit', edit_label_path(label), class: 'uk-button uk-button-primary uk-button-small' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+
+  <%= project.submit 'Save label order', class: 'uk-button uk-button-primary' %>
+  &nbsp;|&nbsp;
+  <%= link_to new_project_label_path(@project), class: 'uk-button uk-button-primary' do %>
+    <i class="uk-icon-plus-circle"></i> New label
+  <% end %>
+<% end %>
+

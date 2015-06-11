@@ -1,0 +1,46 @@
+<%= form_for([@project, @label], html: {class: 'uk-form uk-form-horizontal'}) do |f| %>
+  <% if @label.errors.any? %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@label.errors.count, "error") %> prohibited this label from being saved:</h2>
+
+      <ul>
+      <% @label.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <div class="uk-form-row">
+      <%= f.label :name, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.text_field :name, class: 'uk-form-width-large' %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <%= f.label :white_list, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.text_area :white_list, class: 'uk-form-width-large', rows: 10 %>
+        <p class="uk-form-help-block">
+          * Separate each entry with newlines.<br>
+          * Let the textfield empty to make a free text label.
+        </p>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <%= f.label :uniqueness, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.check_box :uniqueness %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <div class="uk-form-controls">
+        <%= f.submit nil, class: 'uk-button uk-button-primary' %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>

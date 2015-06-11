@@ -1,0 +1,11 @@
+<h1>Editing Label</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', project_labels_path(@label.project), class: 'uk-button uk-button-default' %>
+
+<div class="uk-clearfix">
+  <p class="uk-float-right">
+    <%= link_to 'Destroy', label_path(@label), data: {confirm: 'Are you sure?'}, method: :delete, class: 'uk-button uk-button-danger' %>
+  </p>
+</div>
