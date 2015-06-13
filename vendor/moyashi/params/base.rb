@@ -4,9 +4,6 @@ module Moyashi
       include ActiveModel::Model
 
 
-      DefaultOptions = %i[default]
-
-
       # Define method of each param type. This method is used like
       # ActiveRecord::ConnectionAdapters::SchemaStatements.create_table .
       #
@@ -55,15 +52,7 @@ module Moyashi
 
 
         def options
-          @_options ||= DefaultOptions
-        end
-
-
-        # Define options for this params. Options which is not defined with
-        # this method will be passed to validators of ActiveModel.
-        #
-        def define_options(*args)
-          options.concat(args.map(&:to_sym))
+          @_options ||= []
         end
 
 
@@ -71,10 +60,10 @@ module Moyashi
           # Define class method to define each params
           #
           define_method :define_type do |type, converter|
-            singleton.class_exec(type, converter) do |type, converter|
+            singleton.class_exec do
               define_method type.to_sym, ->(name, opt = {}){
-                options_for_moyashi, options_for_others = parse_options(opt)
-                define_accessor(name, converter, options_for_moyashi[:default], options_for_others)
+                options_for_am, options_for_moyashi = parse_options(opt)
+                define_accessor(name, converter, options_for_moyashi[:default], options_for_am)
                 types << {name: name, options: options_for_moyashi}
               }
             end
@@ -84,11 +73,18 @@ module Moyashi
           # Parse given options Hash.
           #
           # Return:
-          #   [{Options for moyashi}, {Options for others}]
+          #   [{Options for ActiveModel validation}, {Options for moyashi}]
           #
-          def parse_options(opt)
-            opt.to_h.partition {|key, value|
-              options.include?(key.to_sym)
+          def parse_options(opt = {})
+            options_for_am = ActiveModel::Validations.constants
+                            .select{|f| /.+Validator/ =~ f }
+                            .map{|f|
+                              /(.+)Validator/ =~ f
+                              Regexp.last_match[1].downcase
+                            }
+
+            opt.partition {|key, value|
+              options_for_am.include?(key.to_s)
             }.map(&:to_h)
           end
 
@@ -97,7 +93,7 @@ module Moyashi
           # module#attr_accessor for ActiveModel::Model.
           #
           define_method :define_accessor, ->(name, converter, default_value = nil, options = {}){
-            klass.class_exec converter do |converter|
+            klass.class_exec do
               # for ActiveModel::Model
               attr_accessor name.to_sym
 
