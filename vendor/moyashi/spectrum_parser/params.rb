@@ -1,13 +1,23 @@
 module Moyashi
   module SpectrumParser
     class Params < Moyashi::Params::Base
-      Type = {
-        :integer  => ->(i){return i.to_s.to_i},
-        :string   => ->(s){return s.to_s},
-        :boolean  => ->(b){return b.to_s == "0" ? false : true},
-        :file     => ->(f){return f}
-      }
-      Options = %i[default]
+      define_options :default
+
+      define_types do |t|
+        t.integer ->(i){return i.to_s.to_i}
+        t.string ->(s){return s.to_s}
+        t.boolean ->(b){
+          return case b
+          when Integer
+            b == 0 ? false : true
+          when String
+            %w[0 false False].include?(b) ? false : true
+          else
+            !! b
+          end
+        }
+        t.file ->(f){return f}
+      end
     end
   end
 end
