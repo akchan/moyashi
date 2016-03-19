@@ -53,3 +53,4 @@ gem "pry-rails", '0.3.4'
 
 # Use Jquery UI
 gem 'jquery-ui-rails'
+

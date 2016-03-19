@@ -1,0 +1,82 @@
+<%= render partial: 'shared/flash' %>
+
+<h1>Destroy samples</h1>
+
+
+<%= form_for :ids, url: project_destroy_samples_path(@project), html: {class: 'uk-form uk-form-horizontal'} do |f| %>
+  <table id="sortable_table_export" class="tablesorter uk-table uk-table-hover uk-table-striped">
+    <thead>
+      <tr>
+        <th onclick='flip_all_check_box(this)'><%= check_box_tag nil, false, true, class: 'mo-export-check-box' %></th>
+        <th class="uk-text-center">No.</th>
+        <th class="uk-text-center">Detail</th>
+        <% @labels.each do |label| %>
+          <th class="uk-text-center"><%= label.name %></th>
+        <% end %>
+        <th class="uk-text-center">Last update</th>
+        <th class="uk-text-center">Created at</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @records.empty? %>
+        <tr>
+          <td class="uk-text-center" colspan="<%= @labels.size + 5 %>">
+            No record was found.
+          </td>
+        </tr>
+      <% else %>
+        <% @records.each do |record| %>
+          <tr>
+            <td onclick='flip_check_box(this)'>
+              <%= check_box_tag "ids[]", record.id, true, class: 'mo-export-check-box' %>
+            </td>
+            <td class="uk-text-right"><%= record.id %></td>
+            <td class="uk-text-center">
+              <%= link_to project_record_path(@project, record), class: 'uk-button uk-button-default uk-button-small', target: "_blank" do %>
+                <i class="uk-icon-area-chart uk-icon-small"></i>
+              <% end %>
+            </td>
+            <% @labels.each do |label| %>
+              <td class="uk-text-center"><%= record.send(label.column_name.to_sym) %></td>
+            <% end %>
+            <td class="uk-text-center"><%= record.updated_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+            <td class="uk-text-center"><%= record.created_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p>
+    <%= f.submit 'Destroy', class: 'uk-button uk-button-danger' %>
+  </p>
+<% end %>
+
+<p>
+  <%= link_to 'Back', project_path(@project), class: 'uk-button uk-button-default' %>
+</p>
+
+
+<script type="text/javascript">
+  function flip_all_check_box(obj) {
+    var state = $(obj).children("input[type='checkbox']").first().is(':checked');
+
+    $("input.mo-export-check-box").prop('checked', !state);
+  }
+
+  function flip_check_box(obj) {
+    var checkbox = $(obj).children("input[type='checkbox']").first(),
+        state = checkbox.is(':checked');
+
+    checkbox.prop('checked', !state);
+  }
+
+  $(function(){
+    $("input[type='checkbox'].mo-export-check-box").click(function(event){
+      $(this).prop('checked', ! $(this).is(':checked'));
+    });
+  });
+</script>
+

@@ -1,0 +1,44 @@
+<%= render partial: 'shared/flash' %>
+
+<h1><%= @analysis.name %></h1>
+
+<%= form_for :analysis, url: analysis_path(@analysis.name), html: {class: 'uk-form uk-form-horizontal', enctype: 'multipart/form-data'} do |f| %>
+  <% if @analysis.params.errors.any? %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@analysis.params.errors.count, "error") %> prohibited this analysis from being executed:</h2>
+
+      <ul>
+      <% @analysis.params.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <fieldset>
+    <div>
+      <% if @analysis.description %>
+        <div class="uk-form-row">
+          <label class="uk-form-label">Description</label>
+          <div class="uk-form-controls">
+            <p><%= simple_format(h(@analysis.description)) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%= options_for_analysis(@analysis.params) %>
+  </fieldset>
+
+
+  <fieldset>
+    <div class="uk-form-row" style="margin-top:20px">
+      <div class="uk-form-controls">
+        <%= f.submit "Run", class: "uk-button uk-button-primary" %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
+
+<%= link_to 'Back', projects_path, class: 'uk-button uk-button-default' %>

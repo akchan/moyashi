@@ -1,5 +1,7 @@
 module Moyashi
-  module SpectrumParser
+  module SpectrumExporter
+    # Moyashi::SpectrumExporter::Params Class
+    # This implementation is same with Moyashi::SpectrumParser::Params class.
     class Params < Moyashi::Params::Base
       define_types do |t|
         t.integer ->(i){return i.to_i}

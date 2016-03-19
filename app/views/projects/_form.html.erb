@@ -34,6 +34,20 @@
     </div>
 
     <div class="uk-form-row">
+      <%= f.label :default_spectrum_renderer, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.select :default_spectrum_renderer, Moyashi::SpectrumRenderer.renderers.keys, {include_blank: false}, class: 'uk-form-width-large' %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
+      <%= f.label :default_spectrum_exporter, class: 'uk-form-label' %>
+      <div class="uk-form-controls">
+        <%= f.select :default_spectrum_exporter, Moyashi::SpectrumExporter::Base.exporters.keys, {include_blank: false}, class: 'uk-form-width-large' %>
+      </div>
+    </div>
+
+    <div class="uk-form-row">
       <div class="uk-form-controls">
         <%= f.submit nil, class: 'uk-button uk-button-primary' %>
       </div>

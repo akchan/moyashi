@@ -6,12 +6,12 @@
   <table class="uk-table uk-table-hover uk-table-striped label_sort">
     <thead>
       <tr>
-        <th class="uk-text-center">Sort</th>
         <th class="uk-text-center">Name</th>
+        <th class="uk-text-center">Edit</th>
+        <th class="uk-text-center">Sort</th>
         <th class="uk-text-center">White list</th>
         <th class="uk-text-center">Free text</th>
         <th class="uk-text-center">Uniqueness</th>
-        <th colspan="1"></th>
       </tr>
     </thead>
 
@@ -21,8 +21,15 @@
           <%= project.fields_for :labels, label do |l| %>
             <%= l.hidden_field :order %>
           <% end %>
+          <td>
+            <%= link_to label.name, edit_label_path(label) %>
+          </td>
+          <td class="uk-text-center">
+            <%= link_to edit_label_path(label), class: 'uk-button uk-button-small' do %>
+              <i class="uk-icon-edit"></i>
+            <% end %>
+          </td>
           <td class="uk-text-center label_sort_handle"><i class="uk-icon-reorder"></i></td>
-          <td><%= label.name %></td>
           <td class="uk-text-center">
             <% unless label.white_list.empty? %>
               <i class="uk-icon-check"></i>
@@ -38,7 +45,6 @@
               <i class="uk-icon-check"></i>
             <% end %></td>
           <td class="uk-text-center">
-            <%= link_to 'Edit', edit_label_path(label), class: 'uk-button uk-button-primary uk-button-small' %>
           </td>
         </tr>
       <% end %>
@@ -47,7 +53,7 @@
 
   <br>
 
-  <%= project.submit 'Save label order', class: 'uk-button uk-button-primary' %>
+  <%= project.submit 'Save label order'.html_safe, class: 'uk-button uk-button-primary' %>
   &nbsp;|&nbsp;
   <%= link_to new_project_label_path(@project), class: 'uk-button uk-button-primary' do %>
     <i class="uk-icon-plus-circle"></i> New label

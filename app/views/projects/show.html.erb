@@ -4,7 +4,9 @@
 
 <div class="uk-grid">
   <div class="uk-width-large-3-4">
-  <p class=""><%= simple_format h(@project.information) %></p>
+    <p class=""><%= simple_format h(@project.information) %></p>
+    
+    <p>n = <%= @project.records.count %></p>
   </div>
 </div>
 
@@ -17,20 +19,35 @@
       <% @labels.each do |label| %>
         <th class="uk-text-center"><%= label %></th>
       <% end %>
+      <th class="uk-text-center">Last update</th>
+      <th class="uk-text-center">Created at</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @records.each.with_index do |record, i| %>
+    <% if @records.empty? %>
       <tr>
-        <td class="uk-text-right"><%= i + 1 %></td>
-        <td class="uk-text-center">
-          <%= link_to nil, class: 'uk-button uk-button-default' do %>
-            <i class="uk-icon-area-chart uk-icon-medium"></i>
-          <% end %>
+        <td class="uk-text-center" colspan="<%= @labels.size + 4 %>">
+          No record
         </td>
-
       </tr>
+    <% else %>
+      <% @records.each do |record| %>
+        <tr>
+          <td class="uk-text-right"><%= record.id %></td>
+          <td class="uk-text-center">
+            <%= link_to project_record_path(@project, record), class: 'uk-button uk-button-default uk-button-small' do %>
+              <i class="uk-icon-area-chart uk-icon-small"></i>
+            <% end %>
+          </td>
+          <% @column_names.each do |column| %>
+            <td class="uk-text-center"><%= record.send(column.to_sym) %></td>
+          <% end %>
+          <td class="uk-text-center"><%= record.updated_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+          <td class="uk-text-center"><%= record.created_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

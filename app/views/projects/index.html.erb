@@ -16,7 +16,7 @@
   <tbody>
     <% @projects.each_with_index do |project, i| %>
       <tr>
-        <td class="uk-text-right"><%= i + 1 %></td>
+        <td class="uk-text-right"><%= project.id %></td>
         <td><%= link_to project.name, project %></td>
         <td class="uk-text-right"><%= project.records.count %></td>
         <td class="uk-text-center"><%= project.updated_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
@@ -25,3 +25,10 @@
     <% end %>
   </tbody>
 </table>
+
+
+<p>
+  <%= link_to new_project_path, class: 'uk-button uk-button-primary' do %>
+    <i class="uk-icon-plus-circle"></i> New project
+  <% end %>
+</p>

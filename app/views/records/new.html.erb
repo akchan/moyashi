@@ -1,5 +1,100 @@
-<h1>New Record</h1>
+<%= render partial: 'shared/flash' %>
 
-<%= render 'form' %>
+<h1>New sample</h1>
 
-<%= link_to 'Back', records_path %>
+<%= form_for(
+  [@project, @record],
+  as: "project#{@project.id}_record",
+  url: @record.new_record? ? project_records_path(@project) : project_record_path(@project, @record),
+  html: {class: 'uk-form uk-form-horizontal', enctype: 'multipart/form-data'}
+  ) do |f| %>
+  <% if @record.errors.any? || @spectrum_parser.params.errors.any? || (@records && @records.any?{|v| v.errors.any? }) %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@record.errors.count + @records.map(&:errors).map(&:count).inject(0, &:+) + @spectrum_parser.params.errors.count, "error") %> prohibited this sample from being saved:</h2>
+
+      <ul>
+      <% @record.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      <% if @records %>
+        <% @records.each do |record| %>
+          <% record.errors.each do |name, msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% @spectrum_parser.params.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <fieldset>
+    <legend>Spectrum Parser</legend>
+    <div class="uk-form-row">
+      <label class="uk-form-label">Parser</label>
+      <div class="uk-form-controls">
+        <%= select_tag :spectrum_parser_selector, options_for_select(Moyashi::SpectrumParser::Base.parsers.keys, @spectrum_parser.class.name), onchange: 'droplink()' %>
+        <script type="text/javascript">
+          <% if @record.new_record? %>
+            var link_map = {<%= raw(Moyashi::SpectrumParser::Base.parsers.keys.map{|name| "'#{name}': '#{project_new_record_path(@project, name)}'"}.join(",")) %>}
+          <% else %>
+            var link_map = {<%= raw(Moyashi::SpectrumParser::Base.parsers.keys.map{|name| "'#{name}': '#{edit_project_record_path(@project, name)}'"}.join(",")) %>}
+          <% end %>
+
+          function droplink() {
+            var url = link_map[$('#spectrum_parser_selector').val()];
+            location.href = url;
+          }
+        </script>
+      </div>
+
+      <% if @spectrum_parser.description %>
+        <div class="uk-form-row">
+          <label class="uk-form-label">Description</label>
+          <div class="uk-form-controls">
+            <p><%= simple_format(h(@spectrum_parser.description)) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%= options_for_spectrum_parser(@spectrum_parser.params) %>
+  </fieldset>
+
+
+  <fieldset>
+    <legend>Labels</legend>
+
+    <% @project.labels.each do |label| %>
+      <div class="uk-form-row">
+        <%= f.label label.column_name.to_sym, label.name, class: 'uk-form-label' %>
+        <div class="uk-form-controls">
+          <% if label.white_list.lines.size > 0 %>
+            <%= f.select label.column_name.to_sym, label.white_list.split("\n") %>
+          <% else %>
+            <%= f.text_field label.column_name.to_sym, class: 'uk-form-width-large' %>
+            <% if label.uniqueness %>
+              <p class="uk-form-help-inline">
+                * This label must be unique.
+              </p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
+
+
+  <fieldset>
+    <div class="uk-form-row" style="margin-top:20px">
+      <div class="uk-form-controls">
+				<%= f.submit "Submit and add next", class: "uk-button uk-button-primary" %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
+
+<%= link_to 'Back', project_path(@project), class: 'uk-button uk-button-default' %>

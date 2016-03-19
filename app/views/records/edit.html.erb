@@ -1,6 +1,54 @@
-<h1>Editing Record</h1>
+<h1>Edit Sample</h1>
 
-<%= render 'form' %>
+<%= form_for(
+  [@project, @record],
+  as: "project#{@project.id}_record",
+  url: project_record_path(@project, @record),
+  html: {class: 'uk-form uk-form-horizontal'}
+  ) do |f| %>
+  <% if @record.errors.any? %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@record.errors.count, "error") %> prohibited this sample from being saved:</h2>
 
-<%= link_to 'Show', @record %> |
-<%= link_to 'Back', records_path %>
+      <ul>
+      <% @record.errors.each do |name, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <fieldset>
+    <legend>Labels</legend>
+
+    <% @project.labels.each do |label| %>
+      <div class="uk-form-row">
+        <%= f.label label.column_name.to_sym, label.name, class: 'uk-form-label' %>
+        <div class="uk-form-controls">
+          <% if label.white_list.lines.size > 0 %>
+            <%= f.select label.column_name.to_sym, label.white_list.split("\n") %>
+          <% else %>
+            <%= f.text_field label.column_name.to_sym, class: 'uk-form-width-large' %>
+            <% if label.uniqueness %>
+              <p class="uk-form-help-inline">
+              * This label must be unique.
+              </p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
+
+
+  <fieldset>
+    <div class="uk-form-row" style="margin-top:20px">
+      <div class="uk-form-controls">
+        <%= f.submit "Submit", class: "uk-button uk-button-primary" %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
+
+<%= link_to 'Back', project_record_path(@project, @record), class: 'uk-button uk-button-default' %>

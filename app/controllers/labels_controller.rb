@@ -1,5 +1,5 @@
 class LabelsController < ApplicationController
-  before_action :set_project, only: [:index, :new, :create, :order]
+  before_action :set_project, only: [:index, :new, :create, :update_order]
   before_action :set_label, only: [:edit, :update, :destroy]
 
 
@@ -50,7 +50,7 @@ class LabelsController < ApplicationController
     end
   end
 
-  def order
+  def update_order
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to project_labels_path(@project), notice: 'Label order was successfully updated.' }

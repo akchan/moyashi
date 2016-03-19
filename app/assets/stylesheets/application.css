@@ -13,7 +13,7 @@
  * require_tree .
  *= require jquery-ui
  *= require uikit/uikit
- *= require moyashi
  *= require tablesorter
+ *= require moyashi
  *= require_self
  */

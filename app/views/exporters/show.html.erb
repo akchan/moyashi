@@ -1,0 +1,200 @@
+<%= render partial: 'shared/flash' %>
+
+<h1>Export samples</h1>
+
+
+<h2>Label condition</h2>
+
+<div style="margin-bottom: 15px;">
+  <%= form_for :search, url: project_exporter_path(@project, @exporter.name), html: {class: 'uk-form uk-form-horizontal', id: 'label_condition_form'} do |f| %>
+    <% if @labels_for_search.any? %>
+      <table>
+        <thead>
+          <tr>
+            <% @labels_for_search.each do |label| %>
+              <th class="uk-text-center">
+                <%= label.name %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% @labels_for_search.each do |label| %>
+              <td>
+                <%= select_tag "search[#{label.column_name}][]", options_for_select(label.white_list.split("\n"), params[:search] && params[:search][label.column_name.to_sym]), {multiple: true, class: 'mo-export-search-table'} %>
+              </td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        * multiple selection is allowed.
+      </p>
+
+    <% else %>
+      No labels or only free text label is defined for this project.
+    <% end %>
+
+    <p>
+      <%= f.submit 'Set condition', class: 'uk-button uk-button-primary' %>
+    </p>
+  <% end %>
+</div>
+
+
+
+
+<%= form_for :export, url: project_export_path(@project, params[:exporter]), html: {class: 'uk-form uk-form-horizontal'} do |f| %>
+  <h2>Selected samples</h2>
+
+  <% if @is_show %>
+    <strong>
+      Set label condition first.
+    </strong>
+  <% else %>
+    <p>
+      n = <%= @records.size %>
+    </p>
+
+
+    <table id="sortable_table_export" class="tablesorter uk-table uk-table-hover uk-table-striped">
+      <thead>
+        <tr>
+          <th onclick='flip_all_check_box(this)'><%= check_box_tag nil, false, true, class: 'mo-export-check-box' %></th>
+          <th class="uk-text-center">No.</th>
+          <th class="uk-text-center">Detail</th>
+          <% @labels.each do |label| %>
+            <th class="uk-text-center"><%= label.name %></th>
+          <% end %>
+          <th class="uk-text-center">Last update</th>
+          <th class="uk-text-center">Created at</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if @records.empty? %>
+          <tr>
+            <td class="uk-text-center" colspan="<%= @labels.size + 5 %>">
+              No record was found.
+            </td>
+          </tr>
+        <% else %>
+          <% @records.each do |record| %>
+            <tr>
+              <td onclick='flip_check_box(this)'>
+                <%= check_box_tag "export[ids][]", record.id, true, class: 'mo-export-check-box' %>
+              </td>
+              <td class="uk-text-right"><%= record.id %></td>
+              <td class="uk-text-center">
+                <%= link_to project_record_path(@project, record), class: 'uk-button uk-button-default uk-button-small', target: "_blank" do %>
+                  <i class="uk-icon-area-chart uk-icon-small"></i>
+                <% end %>
+              </td>
+              <% @labels.each do |label| %>
+                <td class="uk-text-center"><%= record.send(label.column_name.to_sym) %></td>
+              <% end %>
+              <td class="uk-text-center"><%= record.updated_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+              <td class="uk-text-center"><%= record.created_at.getlocal.strftime("%Y/%m/%d %H:%M") %></td>
+
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+
+  <h2>Exporter options</h2>
+
+
+  <% if params[:search] %>
+    <% params[:search].each_pair do |name, ary| %>
+      <% ary.each do |value| %>
+        <%= hidden_field_tag "search[#{name}][]", value %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+
+  <% if @exporter.params.errors.any? %>
+    <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
+      <h2><%= pluralize(@exporter.params.errors.count, "error prohibited this sample", "errors prohibited these samples") %> from being exported:</h2>
+      <ul>
+        <% @exporter.params.errors.each do |name, msg| %>
+          <li><%= name %>: <%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="uk-form-row">
+    <label class="uk-form-label">Exporter</label>
+    <div class="uk-form-controls">
+      <%= select_tag :spectrum_exporter_selector, options_for_select(Moyashi::SpectrumExporter::Base.exporters.keys, @exporter.name), onchange: 'droplink()' %>
+
+      <script type="text/javascript">
+        var link_map = {<%= raw(Moyashi::SpectrumExporter::Base.exporters.keys.map{|name| "'#{name}': '#{project_exporter_path(@project, name)}'"}.join(",")) %>}
+
+        function droplink(obj) {
+          var url      = link_map[$('#spectrum_exporter_selector').val()],
+              form     = $('#label_condition_form');
+          form.attr('action', url);
+          form.submit();
+        }
+      </script>
+    </div>
+  </div>
+
+
+  <% if @exporter.description %>
+    <div class="uk-form-row">
+      <label class="uk-form-label">Description</label>
+
+      <div class="uk-form-controls uk-form-help-block">
+        <%= simple_format(h(@exporter.description)) %>
+      </div>
+    </div>
+  <% end %>
+
+
+  <%= options_for_spectrum_exporter(@exporter.params) %>
+
+  <div class="uk-form-row">
+    <label class="uk-form-label">&nbsp;</label>
+    <div class="uk-form-controls">
+      <%= f.submit :Export, class: 'uk-button uk-button-primary uk-button-large' %>
+    </div>
+  </div>
+
+<% end %>
+
+
+<script type="text/javascript">
+  function flip_all_check_box(obj) {
+    var state = $(obj).children("input[type='checkbox']").first().is(':checked');
+
+    $("input.mo-export-check-box").prop('checked', !state);
+  }
+
+  function flip_check_box(obj) {
+    var checkbox = $(obj).children("input[type='checkbox']").first(),
+        state = checkbox.is(':checked');
+
+    checkbox.prop('checked', !state);
+  }
+
+  $(function(){
+    $("input[type='checkbox'].mo-export-check-box").click(function(event){
+      $(this).prop('checked', ! $(this).is(':checked'));
+    });
+  });
+</script>
+
+
+
+
+
+

@@ -26,6 +26,14 @@ $(function(){
     $('#sortable_table').tablesorter();
 
 
+    // For exporters/show.html.erb
+    $('#sortable_table_exporter').tablesorter({
+        headers: {
+            0: {sorter: false}
+        }
+    });
+
+
     // For labels/index.html.erb
     $('.label_sort tbody').sortable({
         handle: ".label_sort_handle",

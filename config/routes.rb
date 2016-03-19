@@ -2,12 +2,25 @@ Rails.application.routes.draw do
   root 'projects#index'
 
   # Route for projects controller
-  resources :projects, shallow: true do
-    patch 'order', as: :labels_order, to: "labels#order"
-    resources :labels, except: :show
+  resources :projects do
+    patch 'order', as: :labels_order, to: "labels#update_order"
+    resources :labels, except: :show, shallow: true
+
+    get 'search/(:exporter)', to: "exporters#show", as: :exporter
+    post 'search/(:exporter)', to: "exporters#search"
+    post 'export/(:exporter)', to: "exporters#export", as: :export
+
+    get 'records/new/(:spectrum_parser)', to: "records#new", as: :new_record
+    get 'records/:id/(renderer/:renderer)', to: 'records#show', as: :record
+    resources :records, except: [:index, :new, :show]
   end
+  get 'projects/:id/destroy_samples', to: 'projects#destroy_samples_show', as: :project_destroy_samples
+  post 'projects/:id/destroy_samples', to: 'projects#destroy_samples'
   get 'projects/:id/confirm_deleting', to: 'projects#confirm_deleting', as: :project_confirm_deleting
 
+
+  get 'analysis/:analysis', to: 'analysis#show', as: :analysis
+  post 'analysis/:analysis', to: 'analysis#analyze'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

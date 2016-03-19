@@ -1,74 +1,113 @@
 class RecordsController < ApplicationController
+  before_action :set_project
+  before_action :set_spectrum_parser, except: [:show, :destroy]
   before_action :set_record, only: [:show, :edit, :update, :destroy]
 
-  # GET /records
-  # GET /records.json
-  def index
-    @records = Record.all
-  end
 
   # GET /records/1
   # GET /records/1.json
   def show
+    @renderer = params[:renderer] || @record.project.default_spectrum_renderer || :default
+    @render_path = Moyashi::SpectrumRenderer.renderers.fetch(@renderer)
+  rescue KeyError
+    raise ActionController::RoutingError.new("Spectrum Renderer #{@renderer} was not found.")
   end
+
 
   # GET /records/new
   def new
-    @record = Record.new
+    @record = @project.records.new
   end
+
 
   # GET /records/1/edit
   def edit
   end
 
+
   # POST /records
-  # POST /records.json
   def create
-    @record = Record.new(record_params)
+    spectrum_params = params[:spectrum_parser_options]
+    @record = @project.records.new(record_params)
+
+    # ActiveModel::Validations#valid? clear its ActiveModel::Error object, therefore
+    # this method should be called before @spectrum_parser#parse method is called.
+    @records = @spectrum_parser.valid?(@record) ? [*@spectrum_parser.parse(@record)] : []
+    if @spectrum_parser.errors.empty?
+      begin
+        ActiveRecord::Base.transaction do
+          @records.each(&:save!)
+        end
+        result = true
+      rescue
+        result = false
+      end
+    else
+      result = false
+    end
 
     respond_to do |format|
-      if @record.save
-        format.html { redirect_to @record, notice: 'Record was successfully created.' }
-        format.json { render :show, status: :created, location: @record }
+      if result
+        # format.html { redirect_to project_new_record_url(@project), notice: "#{view_context.pluralize(@records.size, 'record was', 'records were')} successfully created." }
+        format.html {
+          flash[:notice] = "#{view_context.pluralize(@records.size, 'record was', 'records were')} successfully created."
+          render :new
+        }
       else
         format.html { render :new }
-        format.json { render json: @record.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /records/1
-  # PATCH/PUT /records/1.json
+
+  # UPDATE /records/1
   def update
     respond_to do |format|
       if @record.update(record_params)
-        format.html { redirect_to @record, notice: 'Record was successfully updated.' }
-        format.json { render :show, status: :ok, location: @record }
+        format.html { redirect_to project_record_url(@project, @record), notice: "Record was successfully updated." }
       else
         format.html { render :edit }
-        format.json { render json: @record.errors, status: :unprocessable_entity }
       end
     end
   end
 
+
   # DELETE /records/1
-  # DELETE /records/1.json
   def destroy
     @record.destroy
     respond_to do |format|
-      format.html { redirect_to records_url, notice: 'Record was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to project_url(@project), notice: 'Record was successfully destroyed.' }
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_record
-      @record = Record.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def record_params
-      params[:record]
-    end
+private
+  def set_project
+    @project = Project.find(params[:project_id])
+  end
+
+
+  def set_record
+    @record = @project.records.find(params[:id])
+  end
+
+
+  # The default spectrum parser depends on the project.
+  # If it isn't set, :default is used.
+  def set_spectrum_parser
+    key = params[:spectrum_parser_selector] ||
+          params[:spectrum_parser] ||
+          @project.default_spectrum_parser ||
+          :default
+    @spectrum_parser = Moyashi::SpectrumParser::Base.parsers.fetch(key.to_s).new(params[:spectrum_parser_options])
+  rescue KeyError
+    raise ActionController::RoutingError.new("Spectrum Parser #{key} was not found.")
+  end
+
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def record_params
+    key = "project#{@project.id}_record"
+    params[key] && params.require(key).permit(@project.records.column_names.map(&:to_sym))
+  end
 end
