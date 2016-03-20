@@ -6,6 +6,7 @@ class CreateLabels < ActiveRecord::Migration
       t.integer     :order
       t.boolean     :uniqueness
       t.string      :column_name
+      t.string      :spectrum_type, default: 'json'
 
       t.references  :project, index: true, foreign_key: true
 

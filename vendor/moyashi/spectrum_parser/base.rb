@@ -29,6 +29,23 @@ module Moyashi
         end
 
 
+        def define_spectrum_type(type=:json)
+          case type
+          when :json
+            @spectrum_type = JSON
+          when :binary
+            @spectrum_type = String
+          else
+            raise ArgumentError, 'invalid spectrum type.'
+          end
+        end
+
+
+        def spectrum_type
+          @spectrum_type || :json
+        end
+
+
         def add_required_column(column_name, white_list="", uniqueness=false)
           case white_list
           when Enumerable

@@ -32,8 +32,9 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     
     ActiveRecord::Base.transaction do
-      @project.save!
       parser = Moyashi::SpectrumParser::Base.parsers.fetch(@project.default_spectrum_parser)
+      @project.spectrum_type = parser.spectrum_type
+      @project.save!
       parser.required_columns.each do |name, properties|
         @project.labels.create!(name: name, white_list: properties[0], uniqueness: properties[1])
       end
