@@ -62,7 +62,10 @@ module_function
       validate :check_labels
 
 
-      serialize :spectrum, JSON
+      case project.spectrum_type.to_sym
+      when :json
+        serialize :spectrum, JSON
+      end
 
 
       define_method :project do
