@@ -1,7 +1,12 @@
-require 'rinruby'
-
 class SampleAnalysis < Moyashi::Analysis::Base
-  define_name 'Sample Analysis - Draw spectrum'
+  define_name 'Mean intensity'
+
+
+  define_description <<-EOF
+! Analysis function is still in the experimental stage.
+
+This sample analysis reads the csv file extracted with default extractor and return mean intensity.
+EOF
 
 
   define_params do |p|
@@ -14,11 +19,6 @@ class SampleAnalysis < Moyashi::Analysis::Base
     x     = input[0].chomp.split(",").map(&:to_f)
     y     = input[1].chomp.split(",").map(&:to_f)
 
-    R.x = x
-    R.y = y
-    R.eval "plot(x, y, type='n')"
-    R.eval "lines(x, y)"
-
-    "Analysis was done."
+    "Mean intensity : #{y.inject(&:+).to_f / y.size}"
   end
 end
