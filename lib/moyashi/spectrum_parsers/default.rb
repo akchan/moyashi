@@ -32,10 +32,10 @@ class DefaultParser < Moyashi::SpectrumParser::Base
   # 
   # Block:
   #
-  # - You can set a spectrum to record object with using record#spectrum= method.
-  # - The object expressing spectrum must be an object which Ruby can convert to json.
-  # - Exact record object or Array of Record object must be evaluated in the last of the block.
-  # - If you want to break out from block, use break preserve keyword instead of return.
+  #   * You can set a spectrum to record object with using record#spectrum= method.
+  #   * The object expressing spectrum must be an object which Ruby can convert to json.
+  #   * Exact record object or Array of Record object must be evaluated in the last of the block.
+  #   * If you want to break out from block, use break preserve keyword instead of return.
   define_parser do |record, params|
     raw_spectrum = params[:spectrum].read
 
