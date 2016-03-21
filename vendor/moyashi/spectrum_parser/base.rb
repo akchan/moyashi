@@ -122,35 +122,10 @@ module Moyashi
         # 
         #
         # You can set a spectrum to record object with using record#spectrum= method.
-        # The object expressing spectrum must be an object which Ruby can convert to yaml.
+        # The object expressing spectrum must be an object which Ruby can convert to json.
         # Record object or Array of Record object must be evaluated in the last of the block.
         # You can't use return reserved word in the block.
         # 
-        # 
-        # A sample code:
-        # 
-        #   class SomeParser < Moyashi::SpectrumParser::Base
-        #     define_params do |p|
-        #       p.string  :name, html_name: 'Sample name', presence: true, uniqueness: true
-        #       p.integer :age, default: 30, presence: true
-        #       p.select  :sex, collection: ["M", "F"]
-        #       p.file    :spectrum, presence: true
-        #     end
-        #
-        #     define_parser do |record, params|
-        #       name = params.name
-        #
-        #       input_file = params.spectrum
-        #       #=> params.spectrum is an instance of ActionDispatch::Http::Uploadedfile class.
-        #       
-        #       record.file_name = input_file.original_filename
-        # 
-        #       record.spectrum = input_file.read.split(",").map(&:to_i)
-        #
-        #       record
-        #     end
-        #   end
-        #
         def define_parser(&block)
           @parser = block
         end
