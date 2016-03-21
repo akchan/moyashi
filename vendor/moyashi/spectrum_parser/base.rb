@@ -46,7 +46,15 @@ module Moyashi
         end
 
 
-        def add_required_column(column_name, white_list="", uniqueness=false)
+        # Define required labels. These labels should be defined in the project.
+        # These labels are created within a project when this parser is set to
+        # default parser on creation of projects.
+        #
+        # A sample code:
+        # 
+        #   add_required_label :sample_file_name, white_list: "", uniqueness: true
+        #
+        def add_required_label(column_name, white_list: "", uniqueness: false)
           case white_list
           when Enumerable
             white_list = white_list.to_a.join("\n")
@@ -54,12 +62,12 @@ module Moyashi
           else
             raise InvalidArgument, 'column_name should be a String or Enumerable object.'
           end
-          required_columns[column_name.to_sym] = [white_list, uniqueness]
+          required_labels[column_name.to_sym] = [white_list, uniqueness]
         end
 
 
-        def required_columns
-          @required_columns ||= {}
+        def required_labels
+          @required_labels ||= {}
         end
 
 
@@ -170,7 +178,7 @@ module Moyashi
 
       def valid?(record)
         a = @params.valid?
-        b = self.class.required_columns.all? {|name, properties|
+        b = self.class.required_labels.all? {|name, properties|
           res = record.project.labels.find_by(name: name, white_list: properties[0], uniqueness: properties[1])
           unless res
             @params.errors.add :spectrum, "A required column was not found in labels of this project. Define it first. (name: #{name}, white_list: #{properties[0]}, uniqueness: #{properties[1]})"
