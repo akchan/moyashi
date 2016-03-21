@@ -2,6 +2,12 @@
 
 <%= render partial: 'shared/flash', locals: {flash: flash} %>
 
+<p>
+  <%= link_to new_project_path, class: 'uk-button uk-button-primary' do %>
+    <i class="uk-icon-plus-circle"></i> New project
+  <% end %>
+</p>
+
 <table id="sortable_table" class="tablesorter uk-table uk-table-hover uk-table-striped">
   <thead>
     <tr>
@@ -25,10 +31,3 @@
     <% end %>
   </tbody>
 </table>
-
-
-<p>
-  <%= link_to new_project_path, class: 'uk-button uk-button-primary' do %>
-    <i class="uk-icon-plus-circle"></i> New project
-  <% end %>
-</p>
