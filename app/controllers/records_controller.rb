@@ -32,22 +32,14 @@ class RecordsController < ApplicationController
 
     # ActiveModel::Validations#valid? clear its ActiveModel::Error object, therefore
     # this method should be called before @spectrum_parser#parse method is called.
-    @records = @spectrum_parser.valid?(@record) ? [*@spectrum_parser.parse(@record)] : []
-    if @spectrum_parser.errors.empty?
-      begin
-        ActiveRecord::Base.transaction do
-          @records.each(&:save!)
-        end
-        result = true
-      rescue
-        result = false
-      end
-    else
-      result = false
+    @records = @spectrum_parser.parse(@record)
+    
+    ActiveRecord::Base.transaction do
+      @records.each(&:save!)
     end
 
     respond_to do |format|
-      if result
+      if @records.all?(&:persisted?)
         # format.html { redirect_to project_new_record_url(@project), notice: "#{view_context.pluralize(@records.size, 'record was', 'records were')} successfully created." }
         format.html {
           flash[:notice] = "#{view_context.pluralize(@records.size, 'record was', 'records were')} successfully created."

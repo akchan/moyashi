@@ -8,24 +8,20 @@
   url: @record.new_record? ? project_records_path(@project) : project_record_path(@project, @record),
   html: {class: 'uk-form uk-form-horizontal', enctype: 'multipart/form-data'}
   ) do |f| %>
-  <% if @record.errors.any? || @spectrum_parser.params.errors.any? || (@records && @records.any?{|v| v.errors.any? }) %>
+  <% if @spectrum_parser.params.errors.any? || (@records && @records.any?{|v| v.errors.any? }) %>
     <div id="error_explanation" class="uk-alert uk-alert-danger uk-alert-large">
       <h2><%= pluralize(@record.errors.count + @records.map(&:errors).map(&:count).inject(0, &:+) + @spectrum_parser.params.errors.count, "error") %> prohibited this sample from being saved:</h2>
-
       <ul>
-      <% @record.errors.each do |name, msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      <% if @records %>
-        <% @records.each do |record| %>
-          <% record.errors.each do |name, msg| %>
-            <li><%= msg %></li>
+        <% if @records %>
+          <% @records.each do |record| %>
+            <% record.errors.each do |name, msg| %>
+              <li><%= msg %></li>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-      <% @spectrum_parser.params.errors.each do |name, msg| %>
-        <li><%= msg %></li>
-      <% end %>
+        <% @spectrum_parser.params.errors.each do |name, msg| %>
+          <li><%= msg %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>

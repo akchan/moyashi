@@ -200,7 +200,19 @@ module Moyashi
         parser = self.class.parser
         raise unless parser
 
-        parser.call(record, @params)
+        if valid?(record)
+          res = parser.call(record, @params)
+
+          ret = Array === res ? [*res] : [record]
+
+          if @params.errors.empty? && ret.all?{|r| r.errors.empty? }
+            ret
+          else
+            []
+          end
+        else
+          []
+        end
       end
     end
   end
