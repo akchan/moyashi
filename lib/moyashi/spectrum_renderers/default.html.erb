@@ -1,8 +1,30 @@
 <%# = Default spectrum rendere %>
 
 <%# Each render is called as partial template. %>
-<%# Also a variable which is named spectrum will be passed %>
+<%# Also a variable which is named spectrum will be passed. %>
 
-<%
-  spectrum.inspect
-%>
+<div id="spectrum_chart" style="width:1000px; height:400px;"></div>
+
+<div>
+  * You need Internet connection to draw this chart.
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['m/z', 'intensity'],
+      <%= raw spectrum.map{|v| "[#{v.join(",")}]" }.join(",") %>
+    ]);
+
+    var options = {
+      hAxis: {title: 'm/z'},
+      vAxis: {title: 'Intensity', format: "0.0E0"}
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('spectrum_chart'));
+    chart.draw(data, options);
+  }
+</script>
