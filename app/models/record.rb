@@ -96,7 +96,7 @@ module_function
 
           if label.uniqueness
             records = self.class.where(column_name => send(column_name))
-            if records.size > 1 || records.first.id != id
+            if records.size > 1 || (records.size == 1 && records.first.id != id)
               errors.add column_name, "Label #{label.name} is already present. Input another label."
             end
           end
