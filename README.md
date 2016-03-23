@@ -1,13 +1,13 @@
 Moyashi
 ========================================
 
-Moyashi is a simple database software focused on handling a lot of mass spectrum data.
+Moyashi is a simple database software focused on handling a lot of mass spectrum (MS) data.
 
 ## Description
 
-Moyashi is a sample web-based database software. It provides means of handling a lot of large mass spectrum data even if the user isn't a data science specialist.
+Moyashi is a sample web-based database software. It provides means of handling a lot of large MS data even if the user isn't a data science specialist.
 
-Moyashi is written with the Ruby programming langage and Ruby on Rails.
+Moyashi is written with the Ruby programming language and Ruby on Rails.
 
 Users can create importers and exporters of mass spectra. So you can import any file format and export mass spectra for your analysis.
 
@@ -55,11 +55,11 @@ A few steps is needed to install moyashi.
 
 2. Open `localhost:3000` with your web browser.
 
-### Write a mass spectrum parser
+### Add a MS parser
 
-Add parser script file to `path-to-moyahi/lib/moyashi/spectrum_parsers` folder. For detail, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_parsers/default.rb).
+Place parser script to `path-to-moyahi/lib/moyashi/spectrum_parsers` folder. For detail, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_parsers/default.rb).
 
-Script sample:
+Sample script:
 
 ```ruby
 class DefaultParser < Moyashi::SpectrumParser::Base
@@ -87,8 +87,61 @@ class DefaultParser < Moyashi::SpectrumParser::Base
 end
 ```
 
+### Add a MS exporter
+
+Place exporter script to `path-to-moyahi/lib/moyashi/spectrum_exporter` folder. You can write original exporter to adapt data for your analysis script.
+
+Sample script:
+
+```ruby
+class DefaultExporter < Moyashi::SpectrumExporter::Base
+  define_name 'default'
+
+  define_description "This is a sample exporter. Spectrums will be exported in your HOME directory."
+
+  define_params do |p|
+    p.string :dirname, presence: true, default: -> { Time.now.strftime("%Y%m%d") }
+  end
+
+  define_exporter do |records, params|
+    Dir.chdir(Dir.home)
+    dirname = params.dirname
+    i       = 0
+
+    while Dir.exist?(dirname)
+      i      += 1
+      dirname = "#{params.dirname}_#{i}"
+    end
+
+    Dir.mkdir(dirname)
+    Dir.chdir(dirname)
+
+    records.find_each(batch_size: 1) do |record|
+      File.open("sample_#{record.id}.csv", "w") do |file|
+        record.spectrum.transpose.each do |ary|
+          file.puts ary.join(",")
+        end
+      end
+    end
+  end
+end
+```
+
+### Add a MS renderer
+
+Place mass spectrum renderer to `path-to-moyahi/lib/moyashi/spectrum_renderer` folder. You can write original renderer for own visualization.
+
+## Samples
+
+Moyashi is including some sample spectra for test use.
+
+- sample_spectrum.csv: CSV format sample.
+- sample_spectrum.txt: TXT format by [LabSolutions (R) (Shimadzu)](http://www.shimadzu.com/an/labsolutions-cs/index.html).
+- small.pwiz.1.1.mzML: mlML format distributed at [PSI site](http://www.psidev.info/mzml_1_0_0%20).
+
 ## ToDO
 
+- introduce txt importer to master branch
 - Record demo movie
 
 ## Contribution
