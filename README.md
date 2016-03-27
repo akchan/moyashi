@@ -137,6 +137,8 @@ Moyashi is including some sample spectra for test use.
 - sample_spectrum.txt: TXT format by [LabSolutions (R) (Shimadzu)](http://www.shimadzu.com/an/labsolutions-cs/index.html).
 - small.pwiz.1.1.mzML: mlML format distributed at [PSI site](http://www.psidev.info/mzml_1_0_0%20).
 
+sample_spectrum.csv and sample_spectrum.txt are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
+
 ## ToDO
 
 - Introduce txt importer to master branch
@@ -155,4 +157,4 @@ This software is released under MIT license. See below.
 
 ## Author
 
-[Satoshi Funayama (akchan)](https://github.com/akchan)
+[Satoshi Funayama (akchan)](https://github.com/akchan) (Department of Radiology, University of Yamanashi, Japan)
