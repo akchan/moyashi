@@ -56,3 +56,6 @@ gem 'jquery-ui-rails'
 
 # Use mspire to read mzml
 gem 'mspire'
+
+# Use YARD to generate documents
+gem 'yard'
