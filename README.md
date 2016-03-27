@@ -5,11 +5,9 @@ Moyashi is a simple database software focused on handling a lot of mass spectrum
 
 ## Description
 
-Moyashi is a sample web-based database software. It provides means of handling a lot of large MS data even if the user isn't a data science specialist.
+Moyashi is a sample web-based database software written with the Ruby programming language and Ruby on Rails. It provides means of handling a lot of large MS data.
 
-Moyashi is written with the Ruby programming language and Ruby on Rails.
-
-Users can create importers and exporters of mass spectra. So you can import any file format and export mass spectra for your analysis.
+Users can briefly create importers and exporters of mass spectra. So you can import any file format and export mass spectra for your analysis.
 
 ## Demo
 
@@ -34,7 +32,7 @@ A few steps is needed to install moyashi.
 	$ gem install bundler
 	```
 
-3. Run bundler to solve library dependency and initialize database.
+3. Run bundler and rake to initialize moyashi.
 
 	```sh
 	$ cd ./moyashi-master
@@ -141,8 +139,9 @@ Moyashi is including some sample spectra for test use.
 
 ## ToDO
 
-- introduce txt importer to master branch
-- Record demo movie
+- Introduce txt importer to master branch
+- Record a demo movie
+- Document function of storing MS in both JSON object and binary
 
 ## Contribution
 
