@@ -41,4 +41,22 @@ class SampleTxtParser < Moyashi::SpectrumParser::Base
       new_record
     end
   end
+
+  class << self
+    require 'bigdecimal'
+    def make_m_z_collection(first='10.0', last='2000.0', interval='0.1')
+      raise ArgumentError, 'The argument first must be less than last.' unless first.to_f <= last.to_f
+
+      i         = BigDecimal.new first.to_s
+      last      = BigDecimal.new last.to_s
+      interval  = BigDecimal.new interval.to_s
+      ary       = []
+      while i <= last
+        ary << i
+        i += interval
+      end
+
+      ary.map(&:to_f)
+    end
+  end
 end
