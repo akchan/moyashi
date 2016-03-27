@@ -33,7 +33,7 @@ module Moyashi
           case type
           when :json
             @spectrum_type = JSON
-          when :binary
+          when :binary, :string
             @spectrum_type = String
           else
             raise ArgumentError, 'invalid spectrum type.'

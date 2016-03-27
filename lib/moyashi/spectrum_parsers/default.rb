@@ -2,7 +2,7 @@ class DefaultParser < Moyashi::SpectrumParser::Base
   # A name of parser. If this isn't undefined, class name is used.
   define_name "default"
 
-  define_description "This is a sample parser. You can find a sample input file in path-to-moyashi/samples foulder."
+  define_description "This is a sample parser. You can find a sample input file 'sample_spectrum.csv' in path-to-moyashi/samples foulder."
 
   # Required labels. Moyashi checks whether the project has these labels.
   # Moyashi creates these labels within a project whose default parser
@@ -22,6 +22,13 @@ class DefaultParser < Moyashi::SpectrumParser::Base
   define_params do |p|
     p.file :spectrum, presence: true
   end
+
+  # Format of spectra. This is checked only when this parser is set to the default parser creating a new project.
+  # 
+  # Parameter:
+  # 
+  #   Symbol: :json for JSON object (default), :binary for binary data.
+  define_spectrum_type :json
 
   # Define parser with this method. This method will be passed two arguments. 
   #
