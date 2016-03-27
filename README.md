@@ -141,9 +141,7 @@ sample_spectrum.csv and sample_spectrum.txt are provided by courtesy of Kentaro 
 
 ## ToDO
 
-- Introduce txt importer to master branch
 - Record a demo movie
-- Document function of storing MS in both JSON object and binary
 
 ## Contribution
 
