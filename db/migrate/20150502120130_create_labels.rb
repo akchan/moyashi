@@ -3,8 +3,8 @@ class CreateLabels < ActiveRecord::Migration
     create_table :labels do |t|
       t.string      :name
       t.text        :white_list
-      t.integer     :order
-      t.boolean     :uniqueness
+      t.integer     :order, default: 0
+      t.boolean     :uniqueness, default: false
       t.string      :column_name
       t.string      :spectrum_type, default: 'json'
 
