@@ -13,11 +13,11 @@ class DefaultExporter < Moyashi::SpectrumExporter::Base
   define_exporter do |records, params, label_conditions|
     csv = StringIO.new
 
-    csv.puts label_conditions.inspect
+    csv.puts "Conditions: " + label_conditions.inspect
 
-    csv.puts "No," + records.first.spectrum.map(:first).join(",")
+    csv.puts "No," + records.first.spectrum.map(&:first).join(",")
     records.each.with_index do |record, i|
-      csv.puts "#{i}," + record.spectrum.map(:last).join(",")
+      csv.puts "#{i}," + record.spectrum.map(&:last).join(",")
     end
 
     Dir.chdir(Dir.home) do
@@ -31,7 +31,7 @@ class DefaultExporter < Moyashi::SpectrumExporter::Base
 
       records.find_each(batch_size: 1) do |record|
         File.open(filename, "w") do |file|
-          file.write(csv)
+          file.write(csv.string)
         end
       end
     end
