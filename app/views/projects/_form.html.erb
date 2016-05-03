@@ -29,7 +29,7 @@
     <div class="uk-form-row">
       <%= f.label :default_spectrum_parser, class: 'uk-form-label' %>
       <div class="uk-form-controls">
-        <%= f.select :default_spectrum_parser, Moyashi::SpectrumParser::Base.parsers.keys, {include_blank: false}, class: 'uk-form-width-large' %>
+        <%= f.select :default_spectrum_parser, Moyashi::SpectrumParser::Base.parsers.map{|k,v| [v.name, k]}, {include_blank: false}, class: 'uk-form-width-large' %>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
     <div class="uk-form-row">
       <%= f.label :default_spectrum_exporter, class: 'uk-form-label' %>
       <div class="uk-form-controls">
-        <%= f.select :default_spectrum_exporter, Moyashi::SpectrumExporter::Base.exporters.keys, {include_blank: false}, class: 'uk-form-width-large' %>
+        <%= f.select :default_spectrum_exporter, Moyashi::SpectrumExporter::Base.exporters.map{|k,v| [v.name, k]}, {include_blank: false}, class: 'uk-form-width-large' %>
       </div>
     </div>
 

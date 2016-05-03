@@ -90,7 +90,7 @@ private
     key = params[:spectrum_parser_selector] ||
           params[:spectrum_parser] ||
           @project.default_spectrum_parser ||
-          :default
+          :default_parser
     @spectrum_parser = Moyashi::SpectrumParser::Base.parsers.fetch(key.to_s).new(params[:spectrum_parser_options])
   rescue KeyError
     raise ActionController::RoutingError.new("Spectrum Parser #{key} was not found.")

@@ -32,7 +32,7 @@ module Moyashi
         # Return Hash of subclasses which refer each conversion.
         def exporters
           subklasses.map{|klass|
-            [klass.name, klass]
+            [klass.to_s.underscore, klass]
           }.to_h
         end
         
