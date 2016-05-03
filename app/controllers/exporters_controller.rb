@@ -47,7 +47,7 @@ class ExportersController < ApplicationController
 
 
     def set_exporter
-      key = params[:exporter] || @project.default_spectrum_exporter || :default
+      key = params[:exporter] || @project.default_spectrum_exporter || :default_exporter
       options = params[:export] && params[:export][:options]
       @exporter = Moyashi::SpectrumExporter::Base.exporters.fetch(key.to_s).new(options)
     rescue KeyError
