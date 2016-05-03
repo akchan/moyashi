@@ -46,10 +46,10 @@ end
 
 # Use Twitter Bootstrap
 # https://github.com/seyhunak/twitter-bootstrap-rails
-gem "less-rails", '2.7.0'
+gem "less-rails", '>= 2.7.0'
 
 # Use pry for rails
-gem "pry-rails", '0.3.4'
+gem "pry-rails", '>= 0.3.4'
 
 # Use Jquery UI
 gem 'jquery-ui-rails'
