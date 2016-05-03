@@ -6,27 +6,32 @@ class DefaultExporter < Moyashi::SpectrumExporter::Base
 
 
   define_params do |p|
-    p.string :dirname, presence: true, default: -> { Time.now.strftime("%Y%m%d") }
+    p.string :filename, presence: true, default: -> { Time.now.strftime("%Y%m%d.csv") }
   end
 
 
-  define_exporter do |records, params|
-    Dir.chdir(Dir.home)
-    dirname = params.dirname
-    i       = 0
+  define_exporter do |records, params, label_conditions|
+    csv = StringIO.new
 
-    while Dir.exist?(dirname)
-      i      += 1
-      dirname = "#{params.dirname}_#{i}"
+    csv.puts label_conditions.inspect
+
+    csv.puts "No," + records.first.spectrum.map(:first).join(",")
+    records.each.with_index do |record, i|
+      csv.puts "#{i}," + record.spectrum.map(:last).join(",")
     end
 
-    Dir.mkdir(dirname)
-    Dir.chdir(dirname)
+    Dir.chdir(Dir.home) do
+      filename = params.filename
+      i        = 0
 
-    records.find_each(batch_size: 1) do |record|
-      File.open("sample_#{record.id}.csv", "w") do |file|
-        record.spectrum.transpose.each do |ary|
-          file.puts ary.join(",")
+      while Dir.exist?(filename)
+        i       += 1
+        filename = "#{File.basename(params.filename, ".*")}_#{i}#{File.extname(params.filename)}"
+      end
+
+      records.find_each(batch_size: 1) do |record|
+        File.open(filename, "w") do |file|
+          file.write(csv)
         end
       end
     end
