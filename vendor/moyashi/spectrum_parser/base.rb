@@ -32,9 +32,9 @@ module Moyashi
         def define_spectrum_type(type=:json)
           case type
           when :json
-            @spectrum_type = JSON
+            @spectrum_type = :json
           when :binary, :string
-            @spectrum_type = String
+            @spectrum_type = :string
           else
             raise ArgumentError, 'invalid spectrum type.'
           end
@@ -74,7 +74,7 @@ module Moyashi
         # Return Hash of subclasses which refer each conversion.
         def parsers
           subklasses.map{|klass|
-            [klass.name, klass]
+            [klass.to_s.underscore, klass]
           }.to_h
         end
 

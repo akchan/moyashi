@@ -16,12 +16,13 @@ ActiveRecord::Schema.define(version: 20150502120519) do
   create_table "labels", force: :cascade do |t|
     t.string   "name"
     t.text     "white_list"
-    t.integer  "order"
-    t.boolean  "uniqueness"
+    t.integer  "order",         default: 0
+    t.boolean  "uniqueness",    default: false
     t.string   "column_name"
+    t.string   "spectrum_type", default: "json"
     t.integer  "project_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "labels", ["project_id"], name: "index_labels_on_project_id"
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(version: 20150502120519) do
     t.string   "name"
     t.text     "information"
     t.integer  "columns",                   default: 0
+    t.string   "spectrum_type",             default: "json"
     t.string   "default_spectrum_parser",   default: "default"
     t.string   "default_spectrum_renderer", default: "default"
     t.string   "default_spectrum_exporter", default: "default"
