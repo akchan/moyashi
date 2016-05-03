@@ -6,7 +6,7 @@
 <h2>Label condition</h2>
 
 <div style="margin-bottom: 15px;">
-  <%= form_for :search, url: project_exporter_path(@project, @exporter.name), html: {class: 'uk-form uk-form-horizontal', id: 'label_condition_form'} do |f| %>
+  <%= form_for :search, url: project_exporter_path(@project, @exporter.class.to_s.underscore), html: {class: 'uk-form uk-form-horizontal', id: 'label_condition_form'} do |f| %>
     <% if @labels_for_search.any? %>
       <table>
         <thead>
