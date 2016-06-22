@@ -63,7 +63,7 @@ module_function
 
 
       case project.spectrum_type.to_sym
-      when :json
+      when :json, :JSON
         serialize :spectrum, JSON
       end
 
