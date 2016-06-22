@@ -132,10 +132,10 @@
   <div class="uk-form-row">
     <label class="uk-form-label">Exporter</label>
     <div class="uk-form-controls">
-      <%= select_tag :spectrum_exporter_selector, options_for_select(Moyashi::SpectrumExporter::Base.exporters.keys, @exporter.name), onchange: 'droplink()' %>
+      <%= select_tag :spectrum_exporter_selector, options_for_select(Moyashi::SpectrumExporter::Base.exporters.map{|k,v| [v.name, k]}, @exporter.class.to_s.underscore), onchange: 'droplink()' %>
 
       <script type="text/javascript">
-        var link_map = {<%= raw(Moyashi::SpectrumExporter::Base.exporters.keys.map{|name| "'#{name}': '#{project_exporter_path(@project, name)}'"}.join(",")) %>}
+        var link_map = {<%= raw(Moyashi::SpectrumExporter::Base.exporters.map{|k,v| "'#{k}': '#{project_exporter_path(@project, k)}'"}.join(",")) %>}
 
         function droplink(obj) {
           var url      = link_map[$('#spectrum_exporter_selector').val()],
