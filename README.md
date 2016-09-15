@@ -7,9 +7,7 @@ Moyashi is a simple database framework focused on handling a lot of mass spectru
 
 Moyashi is a sample web-based database framework written with the Ruby programming language and Ruby on Rails. It provides means of handling a lot of large MS data to both datascientists and technicians.
 
-Users can briefly create importers and exporters of mass spectra. So you can import any file format and export mass spectra for your analysis.
-
-## Demo
+Researchers and developers can briefly create importers and exporters of mass spectra. So you can import any file format and export mass spectra for analysis.
 
 ## Requirement
 
@@ -127,7 +125,7 @@ end
 
 ### Add a MS renderer
 
-Place mass spectrum renderer to `path-to-moyahi/lib/moyashi/spectrum_renderer` folder. You can write original renderer for own visualization.
+Place mass spectrum renderer to `path-to-moyahi/lib/moyashi/spectrum_renderer` folder as 'some-renderer.html.erb'. You can write original renderer for visualization.
 
 ## Samples
 
@@ -138,10 +136,6 @@ Moyashi is including some sample spectra for test use.
 - small.pwiz.1.1.mzML: mlML format distributed at [PSI site](http://www.psidev.info/mzml_1_0_0%20).
 
 sample_spectrum.csv and sample_spectrum.txt are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
-
-## ToDO
-
-- Record a demo movie
 
 ## Citation
 
@@ -159,4 +153,4 @@ This software is released under MIT license. See below.
 
 ## Author
 
-[Satoshi Funayama (akchan)](https://github.com/akchan) (Department of Radiology, University of Yamanashi, Japan)
+[Satoshi Funayama (akchan)](https://github.com/akchan) ([Department of Radiology, University of Yamanashi, Japan]())
