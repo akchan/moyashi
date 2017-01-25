@@ -19,3 +19,4 @@
 .ruby-version
 Gemfile.lock
 *.sqlite3.bak*
+.DS_Store
