@@ -1,5 +1,4 @@
-Moyashi
-========================================
+# Moyashi
 
 Moyashi is a simple database framework focused on handling a lot of mass spectrum (MS) data.
 
@@ -51,17 +50,17 @@ A few steps is needed to install moyashi.
 
 2. Open `localhost:3000` with your web browser.
 
-### Add a MS parser
+### Add a MS importer
 
-Place parser script to `path-to-moyahi/lib/moyashi/spectrum_parsers` folder. For detail, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_parsers/default.rb).
+Place importer script to `path-to-moyahi/lib/moyashi/spectrum_importers` folder. For detail, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_importers/default.rb).
 
 Sample script:
 
 ```ruby
-class DefaultParser < Moyashi::SpectrumParser::Base
+class DefaultImporter < Moyashi::SpectrumImporter::Base
   define_name "default"
 
-  define_description "This is a sample parser. You can find a sample input file in path-to-moyashi/samples foulder."
+  define_description "This is a sample importer. You can find a sample input file in path-to-moyashi/samples folder."
 
   add_required_label :sample_file_name, white_list: "", uniqueness: true
 
@@ -105,8 +104,8 @@ class DefaultExporter < Moyashi::SpectrumExporter::Base
     i       = 0
 
     while Dir.exist?(dirname)
-      i      += 1
-      dirname = "#{params.dirname}_#{i}"
+      i       += 1
+      dirname  = "#{params.dirname}_#{i}"
     end
 
     Dir.mkdir(dirname)
@@ -127,15 +126,25 @@ end
 
 Place mass spectrum renderer to `path-to-moyahi/lib/moyashi/spectrum_renderer` folder as 'some-renderer.html.erb'. You can write original renderer for visualization.
 
-## Samples
+## Tutorial
 
-Moyashi is including some sample spectra for test use.
+### Sample data
+
+Moyashi includes some sample spectra for test use.
 
 - sample_spectrum.csv: CSV format sample.
 - sample_spectrum.txt: TXT format by [LabSolutions (R) (Shimadzu)](http://www.shimadzu.com/an/labsolutions-cs/index.html).
 - small.pwiz.1.1.mzML: mlML format distributed at [PSI site](http://www.psidev.info/mzml_1_0_0%20).
 
-sample_spectrum.csv and sample_spectrum.txt are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
+`sample_spectrum.csv` and `sample_spectrum.txt` are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
+
+### Import sample data
+
+### Export sample data
+
+### Invoke script for analysis
+
+
 
 ## Citation
 
@@ -143,11 +152,13 @@ Please cite Moyashi when using this for your publications.
 
 ## Contribution
 
-You can report bugs to make issues or send pull request.
+You can report bugs to make issues or send a pull request.
+
+If you have an idea to improve Moyashi, you can raise an new issue on GitHub and/or send a pull request.
 
 ## Licence
 
-This software is released under MIT license. See below.
+This software is released under MIT license. See below for details.
 
 [LICENSE](https://github.com/akchan/moyashi/blob/master/LICENSE)
 
