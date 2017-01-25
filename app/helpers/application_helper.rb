@@ -1,8 +1,8 @@
 module ApplicationHelper
-  def options_for_spectrum_parser(parser_params)
-    fields_for 'spectrum_parser_options', parser_params do |f|
+  def options_for_spectrum_importer(importer_params)
+    fields_for 'spectrum_importer_options', importer_params do |f|
       html = String.new
-      parser_params.each do |name, value, type, options|
+      importer_params.each do |name, value, type, options|
         html << content_tag(:div, class: 'uk-form-row'){
           f.label(name, class: 'uk-form-label') \
           + content_tag(:div, class: 'uk-form-controls'){

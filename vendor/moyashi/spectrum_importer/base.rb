@@ -1,31 +1,31 @@
 module Moyashi
-  module SpectrumParser
+  module SpectrumImporter
     class Base
       class << self
         def inherited(subclass)
           subklasses << subclass
-          subclass.const_set(:Params, Class.new(Moyashi::SpectrumParser::Params))
+          subclass.const_set(:Params, Class.new(Moyashi::SpectrumImporter::Params))
         end
 
 
         # Return the alias, otherwise return self name
         def name
-          @parser_alias || self.to_s
+          @importer_alias || self.to_s
         end
 
 
         def define_name(name)
-          @parser_alias = name
+          @importer_alias = name
         end
 
 
         def description
-          @parser_description
+          @importer_description
         end
 
 
         def define_description(desc)
-          @parser_description = desc
+          @importer_description = desc
         end
 
 
@@ -47,8 +47,8 @@ module Moyashi
 
 
         # Define required labels. These labels should be defined in the project.
-        # These labels are created within a project when this parser is set to
-        # default parser on creation of projects.
+        # These labels are created within a project when this importer is set to
+        # default importer on creation of projects.
         #
         # A sample code:
         # 
@@ -72,7 +72,7 @@ module Moyashi
 
 
         # Return Hash of subclasses which refer each conversion.
-        def parsers
+        def importers
           subklasses.map{|klass|
             [klass.to_s.underscore, klass]
           }.to_h
@@ -94,7 +94,7 @@ module Moyashi
         end
 
 
-        # Define parameters with DSL syntax. Moyashi::SpectrumParser::Params
+        # Define parameters with DSL syntax. Moyashi::SpectrumImporter::Params
         # object is passed to the block.
         # 
         # A sample code:
@@ -111,14 +111,14 @@ module Moyashi
         end
 
 
-        # Define parser with this method. This method will be passed two arguments. 
+        # Define spectrum parser with this method. This method will be passed two arguments. 
         # If you want to break out from block, use break preserve keyword instead of return.
         #
         # 
         # Parameters:
         # 
         #   * record: An instance of ActiveRecord class of project's record.
-        #   * params: An instance of Moyashi::SpectrumParser::Params which is defined with define_params class method.
+        #   * params: An instance of Moyashi::SpectrumImporter::Params which is defined with define_params class method.
         # 
         #
         # You can set a spectrum to record object with using record#spectrum= method.

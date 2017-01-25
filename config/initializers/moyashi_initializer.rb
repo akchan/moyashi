@@ -1,7 +1,7 @@
 # Setting variables
 #
 eager_loading_directories = [
-  %w[lib moyashi spectrum_parsers],
+  %w[lib moyashi spectrum_importers],
   %w[lib moyashi spectrum_exporters],
   %w[lib moyashi analyses]
 ]

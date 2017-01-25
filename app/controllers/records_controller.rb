@@ -1,6 +1,6 @@
 class RecordsController < ApplicationController
   before_action :set_project
-  before_action :set_spectrum_parser, except: [:show, :destroy]
+  before_action :set_spectrum_importer, except: [:show, :destroy]
   before_action :set_record, only: [:show, :edit, :update, :destroy]
 
 
@@ -27,12 +27,12 @@ class RecordsController < ApplicationController
 
   # POST /records
   def create
-    spectrum_params = params[:spectrum_parser_options]
+    spectrum_params = params[:spectrum_importer_options]
     @record = @project.records.new(record_params)
 
     # ActiveModel::Validations#valid? clear its ActiveModel::Error object, therefore
-    # this method should be called before @spectrum_parser#parse method is called.
-    @records = @spectrum_parser.parse(@record)
+    # this method should be called before @spectrum_importer#parse method is called.
+    @records = @spectrum_importer.parse(@record)
     
     ActiveRecord::Base.transaction do
       @records.each(&:save!)
@@ -84,16 +84,16 @@ private
   end
 
 
-  # The default spectrum parser depends on the project.
+  # The default spectrum importer depends on the project.
   # If it isn't set, :default is used.
-  def set_spectrum_parser
-    key = params[:spectrum_parser_selector] ||
-          params[:spectrum_parser] ||
-          @project.default_spectrum_parser ||
-          :default_parser
-    @spectrum_parser = Moyashi::SpectrumParser::Base.parsers.fetch(key.to_s).new(params[:spectrum_parser_options])
+  def set_spectrum_importer
+    key = params[:spectrum_importer_selector] ||
+          params[:spectrum_importer] ||
+          @project.default_spectrum_importer ||
+          :default_importer
+    @spectrum_importer = Moyashi::SpectrumImporter::Base.importers.fetch(key.to_s).new(params[:spectrum_importer_options])
   rescue KeyError
-    raise ActionController::RoutingError.new("Spectrum Parser #{key} was not found.")
+    raise ActionController::RoutingError.new("Spectrum Importer #{key} was not found.")
   end
 
 

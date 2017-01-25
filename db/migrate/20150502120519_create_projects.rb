@@ -5,7 +5,7 @@ class CreateProjects < ActiveRecord::Migration
       t.text    :information
       t.integer :columns, default: 0
       t.string  :spectrum_type, default: 'json'
-      t.string  :default_spectrum_parser, default: "default_parser"
+      t.string  :default_spectrum_importer, default: "default_importerr"
       t.string  :default_spectrum_renderer, default: "default_renderer"
       t.string  :default_spectrum_exporter, default: "default_exporter"
 

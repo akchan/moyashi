@@ -1,9 +1,9 @@
 require 'mspire/mzml'
 
-class SampleMzmlParser < Moyashi::SpectrumParser::Base
-  define_name "Sample mzML parser"
+class SampleMzmlImporter < Moyashi::SpectrumImporter::Base
+  define_name "Sample mzML importer"
 
-  define_description "This is a sample parser. You can find a sample input file 'small.pwiz.1.1.mzML' in path-to-moyashi/samples foulder."
+  define_description "This is a sample importer. You can find a sample input file 'small.pwiz.1.1.mzML' in path-to-moyashi/samples foulder."
 
   add_required_label :sample_file_name, white_list: "", uniqueness: true
 

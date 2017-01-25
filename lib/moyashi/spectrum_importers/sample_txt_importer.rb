@@ -1,7 +1,10 @@
-class SampleTxtParser < Moyashi::SpectrumParser::Base
+require 'bigdecimal'
+
+
+class SampleTxtImporter < Moyashi::SpectrumImporter::Base
   define_name "TXT by LabSolutions (Shimadzu)."
 
-  define_description "This is a samlpe parser. You can find a sample input file 'sample_spectrum.txt' in in path-to-moyashi/samples foulder."
+  define_description "This is a samlpe importer. You can find a sample input file 'sample_spectrum.txt' in in path-to-moyashi/samples foulder."
 
   add_required_label :spectrum_sample_id, white_list: "", uniqueness: true
   add_required_label :total_intensity, white_list: "", uniqueness: false
@@ -43,7 +46,6 @@ class SampleTxtParser < Moyashi::SpectrumParser::Base
   end
 
   class << self
-    require 'bigdecimal'
     def make_m_z_collection(first='10.0', last='2000.0', interval='0.1')
       raise ArgumentError, 'The argument first must be less than last.' unless first.to_f <= last.to_f
 

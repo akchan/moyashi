@@ -1,15 +1,15 @@
-class DefaultParser < Moyashi::SpectrumParser::Base
-  # A name of parser. If this isn't undefined, class name is used.
+class DefaultImporter < Moyashi::SpectrumImporter::Base
+  # A name of importer. If this isn't undefined, class name is used.
   define_name "default"
 
-  define_description "This is a sample parser. You can find a sample input file 'sample_spectrum.csv' in path-to-moyashi/samples foulder."
+  define_description "This is a sample importer. You can find a sample input file 'sample_spectrum.csv' in path-to-moyashi/samples foulder."
 
   # Required labels. Moyashi checks whether the project has these labels.
-  # Moyashi creates these labels within a project whose default parser
-  # is set this parser when a new project is created.
+  # Moyashi creates these labels within a project whose default importer
+  # is set this importer when a new project is created.
   add_required_label :sample_file_name, white_list: "", uniqueness: true
 
-  # Parameters to parse mass spectrum.
+  # Parameters to import mass spectrum.
   #
   # Another sample code:
   #
@@ -23,19 +23,19 @@ class DefaultParser < Moyashi::SpectrumParser::Base
     p.file :spectrum, presence: true
   end
 
-  # Format of spectra. This is checked only when this parser is set to the default parser creating a new project.
+  # Format of spectra. This is checked only when this importer is set to the default importer creating a new project.
   # 
   # Parameter:
   # 
   #   Symbol: :json for JSON object (default), :binary for binary data.
   define_spectrum_type :json
 
-  # Define parser with this method. This method will be passed two arguments. 
+  # Define importer with this method. This method will be passed two arguments. 
   #
   # Parameters:
   # 
   #   * record: An instance of ActiveRecord class of project's record.
-  #   * params: An instance of Moyashi::SpectrumParser::Params which is defined with define_params class method.
+  #   * params: An instance of Moyashi::SpectrumImporter::Params which is defined with define_params class method.
   # 
   # Block:
   #
@@ -43,7 +43,7 @@ class DefaultParser < Moyashi::SpectrumParser::Base
   #   * The object expressing spectrum must be an object which Ruby can convert to json.
   #   * Exact record object or Array of Record object must be evaluated in the last of the block.
   #   * If you want to break out from block, use break preserve keyword instead of return.
-  define_parser do |record, params|
+  define_importer do |record, params|
     raw_spectrum = params[:spectrum].read
 
     mzs         = raw_spectrum.chomp.split("\n")[0].split(",").map{|str| str.to_f }

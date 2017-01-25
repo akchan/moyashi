@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     post 'search/(:exporter)', to: "exporters#search"
     post 'export/(:exporter)', to: "exporters#export", as: :export
 
-    get 'records/new/(:spectrum_parser)', to: "records#new", as: :new_record
+    get 'records/new/(:spectrum_importer)', to: "records#new", as: :new_record
     get 'records/:id/(renderer/:renderer)', to: 'records#show', as: :record
     resources :records, except: [:index, :new, :show]
   end

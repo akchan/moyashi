@@ -1,5 +1,5 @@
 module Moyashi
-  module SpectrumParser
+  module SpectrumImporter
     class Params < Moyashi::Params::Base
       define_types do |t|
         t.integer ->(i){return i.to_i}

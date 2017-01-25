@@ -27,9 +27,9 @@
     </div>
 
     <div class="uk-form-row">
-      <%= f.label :default_spectrum_parser, class: 'uk-form-label' %>
+      <%= f.label :default_spectrum_importer, class: 'uk-form-label' %>
       <div class="uk-form-controls">
-        <%= f.select :default_spectrum_parser, Moyashi::SpectrumParser::Base.parsers.map{|k,v| [v.name, k]}, {include_blank: false}, class: 'uk-form-width-large' %>
+        <%= f.select :default_spectrum_importer, Moyashi::SpectrumImporter::Base.importers.map{|k,v| [v.name, k]}, {include_blank: false}, class: 'uk-form-width-large' %>
       </div>
     </div>
 
