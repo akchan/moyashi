@@ -32,11 +32,11 @@ ActiveRecord::Schema.define(version: 20150502120519) do
     t.text     "information"
     t.integer  "columns",                   default: 0
     t.string   "spectrum_type",             default: "json"
-    t.string   "default_spectrum_importer",   default: "default"
-    t.string   "default_spectrum_renderer", default: "default"
-    t.string   "default_spectrum_exporter", default: "default"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.string   "default_spectrum_importer", default: "default_importerr"
+    t.string   "default_spectrum_renderer", default: "default_renderer"
+    t.string   "default_spectrum_exporter", default: "default_exporter"
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
   end
 
 end
