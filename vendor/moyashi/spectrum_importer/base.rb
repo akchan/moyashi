@@ -153,14 +153,14 @@ module Moyashi
 
       def valid?(record)
         a = @params.valid?
-        b = self.class.required_labels.all? {|name, properties|
+        b = self.class.required_labels.map {|name, properties|
           res = record.project.labels.find_by(name: name, white_list: properties[0], uniqueness: properties[1])
           unless res
             @params.errors.add :spectrum, "A required column was not found in labels of this project. Define it first. (name: #{name}, white_list: #{properties[0]}, uniqueness: #{properties[1]})"
           end
           res
         }
-        a && b
+        a && b.all?
       end
 
 
