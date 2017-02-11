@@ -46,6 +46,11 @@ module_function
         end
 
 
+        define_method :project do
+          project.class.find(project.id)
+        end
+
+
         def remove_column(column_name)
           result = connection.remove_column table_name, column_name.to_s
           reset_column_information
@@ -68,11 +73,6 @@ module_function
       end
 
 
-      define_method :project do
-        project.class.find(project.id)
-      end
-
-
       def method_missing(method_name, *args)
         method_name =~ /([^=]+)(=?)\z/
         name        = $1
@@ -82,6 +82,11 @@ module_function
         else
           super
         end
+      end
+
+
+      def project
+        self.class.project
       end
 
 
@@ -95,9 +100,12 @@ module_function
           end
 
           if label.uniqueness
-            records = self.class.where(column_name => send(column_name))
-            if records.size > 1 || (records.size == 1 && records.first.id != id)
-              errors.add column_name, "Label #{label.name} is already present. Input another label."
+            n_records = self.class.where(column_name => send(column_name))
+                                .where.not(:id => id)
+                                .count
+
+            if n_records >= 1
+              errors.add column_name, "Label #{label.name}:#{send(column_name)} already exists. Input another label."
             end
           end
         end
