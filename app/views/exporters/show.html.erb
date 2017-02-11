@@ -62,7 +62,7 @@
       <thead>
         <tr>
           <th onclick='flip_all_check_box(this)'><%= check_box_tag nil, false, true, class: 'mo-export-check-box' %></th>
-          <th class="uk-text-center">No.</th>
+          <th class="uk-text-center">ID</th>
           <th class="uk-text-center">Detail</th>
           <% @labels.each do |label| %>
             <th class="uk-text-center"><%= label.name %></th>

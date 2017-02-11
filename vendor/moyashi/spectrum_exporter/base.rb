@@ -88,7 +88,7 @@ module Moyashi
         #       dirname = params.dirname
         #       
         #       Dir.chdir(Dir.home)
-        #       Dir.mkdir(dirname)
+        #       Dir.mkdir(dirname) unless Dir.exist?(dirname)
         #       Dir.chdir(dirname)
         #
         #       records.each do |record|
