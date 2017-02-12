@@ -1,6 +1,6 @@
 # Moyashi
 
-Moyashi is a simple database framework focused on handling a lot of mass spectrum (MS) data.
+Moyashi is a simple database framework focusing on handling a lot of mass spectrum (MS) data.
 
 ## Description
 
