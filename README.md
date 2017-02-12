@@ -239,4 +239,4 @@ This software is released under MIT license. See below for details.
 
 ## Author
 
-[Satoshi Funayama (akchan)](https://github.com/akchan) ([Department of Radiology, University of Yamanashi, Japan]())
+[Satoshi Funayama (akchan)](https://github.com/akchan), [Department of Radiology, University of Yamanashi, Japan](http://yamarad.umin.ne.jp)
