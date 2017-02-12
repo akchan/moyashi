@@ -38,6 +38,8 @@ EOF
     file1 = params.group1.tempfile.path
     file2 = params.group2.tempfile.path
 
+    filename = Time.now.strftime("%Y%m%d%H%M%S.pdf")
+
     r_script = <<EOF
 #/usr/bin/env R --vanilla
 
@@ -62,7 +64,7 @@ l = ncol(csv_a) - 1
 x      = names(csv_a)[2:(l+1)]
 result = sapply(1:l, func)
 
-pdf("#{Dir.home}/#{Time.now.strftime("%Y%m%d%H%M%S.pdf")}", width=8, height=5)
+pdf("#{Dir.home}/#{filename}", width=8, height=5)
 
 plot(x, result, type="l", log="y", xlab="m/z", yaxt="n", ylab="p value")
 aty    = axTicks(2)
@@ -77,6 +79,12 @@ dev.off()
 EOF
 
     result = system("R --vanilla --args #{file1} #{file2} <<EOF\n#{r_script}")
+
+
+    # In case of mac, open pdf file.
+    if system("which open")
+      `open #{Dir.home}/#{filename}`
+    end
 
 
     if result
