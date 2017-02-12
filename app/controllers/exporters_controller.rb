@@ -22,7 +22,7 @@ class ExportersController < ApplicationController
     @records_for_export = @project.records.where(id: ids)
 # binding.pry
     if @exporter.valid? && @records_for_export.any?
-      @exporter.export(@records_for_export, search_params)
+      @exporter.export(@records_for_export, label_conditions)
 
       flash[:notice] = "Export was successfully done."
     end
@@ -31,18 +31,20 @@ class ExportersController < ApplicationController
 
 
   private
-    def set_project
-      @project = Project.find(params[:project_id])
+    def label_conditions
+      label_hash = @labels.map{|l| [l.column_name, l.name]}.to_h
+
+      search_params.map{|k, v|
+        [
+          label_hash[k],
+          v
+        ]
+      }.to_h
     end
 
 
-    def set_labels_for_search
-      @labels_for_search = @project.labels.reject{|l| l.white_list.empty? }.sort_by{|l| l.order }
-    end
-
-
-    def set_labels
-      @labels = @project.labels.sort_by{|l| l.order }
+    def search_params
+      params[:search] ? params.require(:search).permit(@labels.map{|l| [l.column_name, []] }.to_h) : {}
     end
 
 
@@ -55,12 +57,22 @@ class ExportersController < ApplicationController
     end
 
 
-    def set_records
-      @records = @project.records.where(search_params).select(*(@project.records.column_names - ["spectrum"]))
+    def set_labels
+      @labels = @project.labels.sort_by{|l| l.order }
     end
 
 
-    def search_params
-      params[:search] ? params.require(:search).permit(@labels.map{|l| [l.column_name, []] }.to_h) : {}
+    def set_labels_for_search
+      @labels_for_search = @project.labels.reject{|l| l.white_list.empty? }.sort_by{|l| l.order }
+    end
+
+
+    def set_project
+      @project = Project.find(params[:project_id])
+    end
+
+
+    def set_records
+      @records = @project.records.where(search_params).select(*(@project.records.column_names - ["spectrum"]))
     end
 end

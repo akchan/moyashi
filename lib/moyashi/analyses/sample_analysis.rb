@@ -3,9 +3,8 @@ class SampleAnalysis < Moyashi::Analysis::Base
 
 
   define_description <<-EOF
-! Analysis function is still in the experimental stage.
-
-This sample analysis reads the csv file extracted with default extractor and return mean intensity.
+This sample analysis reads the csv file extracted with default extractor and
+return mean intensity of second line in given csv file.
 EOF
 
 
@@ -16,8 +15,8 @@ EOF
 
   define_analysis do |params|
     input = params.spectrum.read.split("\n")
-    x     = input[0].chomp.split(",").map(&:to_f)
-    y     = input[1].chomp.split(",").map(&:to_f)
+    x     = input[1].chomp.split(",").slice(1..-1).map(&:to_f)
+    y     = input[2].chomp.split(",").slice(1..-1).map(&:to_f)
 
     "Mean intensity : #{y.inject(&:+).to_f / y.size}"
   end

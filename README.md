@@ -10,28 +10,26 @@ Researchers and developers can briefly create importers and exporters of mass sp
 
 ## Requirement
 
-- Ruby 1.9.3 or newer
-
-
+- Ruby 1.9.3 or newer (Ruby 2.3.3 is recommended)
 
 ## Install
 
-A few steps is needed to install moyashi.
+A few steps is needed to install Moyashi.
 
-1. Download moyashi to local by clicking button right above or running these commands in your console.
+1. Download Moyashi to local by clicking button right above or running these commands in your console.
 
-	``` sh
+	```sh
 	$ wget https://github.com/akchan/moyashi/archive/master.zip
 	$ unzip master.zip
 	```
 
-2. Install bundler (ruby gem) to your ruby.
+2. Install bundler which is one of ruby gems to your ruby.
 
 	```sh
 	$ gem install bundler
 	```
 
-3. Run bundler and rake to initialize moyashi.
+3. Run bundler and rake to initialize Moyashi. And then, installation of Moyashi is finished!
 
 	```sh
 	$ cd ./moyashi-master
@@ -54,9 +52,15 @@ A few steps is needed to install moyashi.
 
 ### Add a MS importer
 
-Place importer script to `path-to-moyahi/lib/moyashi/spectrum_importers` folder. For detail, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_importers/default.rb).
+Moyashi has 3 default importers below.
 
-Sample script:
+- default: importer for csv consisted of 2 rows. See `path-to-moyashi/samples/sample_spectrum.csv/`.
+- Sample mzML importer: importer for mzML. See `path-to-moyashi/samples/sample_spectrum.mzml`
+- TXT by LabSolutions (Shimadzu): importer for txt exported with LabSolutions.
+
+Place importer script to `path-to-moyashi/lib/moyashi/spectrum_importers` directory. For details of how to write a importer script, check [source code](https://github.com/akchan/moyashi/blob/master/lib/moyashi/spectrum_importers/default.rb).
+
+Here is a sample script of importer:
 
 ```ruby
 class DefaultImporter < Moyashi::SpectrumImporter::Base
@@ -86,9 +90,9 @@ end
 
 ### Add a MS exporter
 
-Place exporter script to `path-to-moyahi/lib/moyashi/spectrum_exporter` folder. You can write original exporter to adapt data for your analysis script.
+Place exporter script to `path-to-moyashi/lib/moyashi/spectrum_exporter` directory. You can write an original exporter to adapt data for your analysis script.
 
-Sample script:
+Here is a sample script of exporter:
 
 ```ruby
 class DefaultExporter < Moyashi::SpectrumExporter::Base
@@ -126,27 +130,96 @@ end
 
 ### Add a MS renderer
 
-Place mass spectrum renderer to `path-to-moyahi/lib/moyashi/spectrum_renderer` folder as 'some-renderer.html.erb'. You can write original renderer for visualization.
+You can write original renderer for visualization. Place mass spectrum renderer to `path-to-moyashi/lib/moyashi/spectrum_renderer` directory as 'some-renderer.html.erb'.
 
-## Tutorial
-
-### Sample data
+## Sample data
 
 Moyashi includes some sample spectra for test use.
 
 - sample_spectrum.csv: CSV format sample.
-- sample_spectrum.txt: TXT format by [LabSolutions (R) (Shimadzu)](http://www.shimadzu.com/an/labsolutions-cs/index.html).
+- sample_spectrum.txt: TXT format of [LabSolutions (R) (Shimadzu)](http://www.shimadzu.com/an/labsolutions-cs/index.html).
 - small.pwiz.1.1.mzML: mlML format distributed at [PSI site](http://www.psidev.info/mzml_1_0_0%20).
 
-`sample_spectrum.csv` and `sample_spectrum.txt` are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
+\(*) `sample_spectrum.csv` and `sample_spectrum.txt` are provided by courtesy of Kentaro Yoshimura (Department of Anatomy and Cell Biology, Interdisciplinary Graduate School of Medicine and Engineering, University of Yamanashi, Japan).
+
+## Tutorial
+
+### Create a new project
+
+1. Startup Moyashi and open your web browser.
+
+	```bash
+	$ cd path-to-moyashi
+	$ rails s
+	
+	# If you use mac
+	$ open -a safari localhost:3000
+	```
+
+2. Focus to your web browswer and create a new project on top page of Moyashi clicking 'New Project' button.
+
+3. Give some name and change `default spectrum importer` to `TXT by LabSolutions (Shimadzu)`.
+
+4. Click submit button.
 
 ### Import sample data
 
+1. Select the created project. You can see no sample of the project.
+
+2. First, add labels which is required by spectrum importer. Click `Label management` on menu above and add some labels like following:
+
+   - cancer
+	   - white list: `yes` and `no`.
+	   - uniqueness: false
+   - spectrum\_sample\_id
+	   - white list: leave it empty
+	   - uniqueness: true
+   - total\_intensity
+	   - white list: leave it empty
+	   - uniqueness: false
+
+	(*1) Devide elements of white list with return.
+	
+	(*2) Leave white list empty for free text labels.
+
+3. Open `import samples` page from menu above. Select sample files for this tutorial as following:
+
+   - for cancer `yes`: files in `path-to-moyashi/samples/tutorial/colon_tumor/`
+   - for cancer `no`: files in `path-to-moyashi/samples/tutorial/colon_nontumor`
+
+### Check mass spectrum of imported sample
+
+1. Open `Project Home` and select detail button of one sample.
+
+2. Then Moyashi shows label information and mass spectrum of selected sample. 
+
 ### Export sample data
+
+1. Open `export samples` page from menu above.
+
+2. Set label conditions to limit samples clicking `yes` on the cancer column.
+
+3. Click `Set condition` button.
+
+4. Check the list of samples and click the `Export` button.
+
+5. Do same for label condition of cancer `no`.
 
 ### Invoke script for analysis
 
+You can analyse mass spectra using exported csv file. In this tutorial, you can invoke a sample analysis script.
 
+1. First, copy the sample analysis script `path-to-moyashi/samples/tutorial/difference_analysis.rb` to `path-to-moyashi/lib/moyashi/analyses/`.
+
+2. On your console (like terminal.app), stop Moyashi using ctrl+c and restart it to recognize the analysis script which you add.
+
+3. Open `Intensity difference analysis` from Analysis menu above.
+
+4. Select 2 csv files which you exported in previous section.
+
+5. Click `Run` button and wait for a while.
+
+6. Check the created pdf in your HOME directory (ex. `/home/your-name`).
 
 ## Citation
 
